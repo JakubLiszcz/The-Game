@@ -34,6 +34,8 @@ public class GraphicalUserInterface{
     JButton dragonAttackButton;
     JButton saveUserDataButton;
     JButton loadUserDataButton;
+    JButton witcherAttackButton;
+    JButton basiliskAttackButton;
 
 
     private JTextField nameField;
@@ -110,6 +112,12 @@ public class GraphicalUserInterface{
         dragonAttackButton = new JButton("Attack dragon");
         dragonAttackButton.addActionListener(new DragonAttackButtonListener());
 
+        witcherAttackButton = new JButton("Attack witcher");
+        witcherAttackButton.addActionListener(new WitcherAttackButtonListener());
+
+        basiliskAttackButton = new JButton("Attack dragon");
+       basiliskAttackButton.addActionListener(new BasiliskAttackButtonListener());
+
         saveUserDataButton = new JButton("Save");
         saveUserDataButton.addActionListener(e -> saveUserData());
 
@@ -141,6 +149,8 @@ public class GraphicalUserInterface{
         panelGame.add(saveUserDataButton);
 
         panelBattleArea.add(dragonAttackButton);
+        panelBattleArea.add(witcherAttackButton);
+        panelBattleArea.add(basiliskAttackButton);
 
         panelShop.add(shopList);
 
@@ -244,6 +254,51 @@ public class GraphicalUserInterface{
         }
     }
 
+    class WitcherAttackButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent ev){
+            gameMessageArea.append("Attack witcher!!!" +"\n");
+            witcher.shout();
+
+            p1.setHealth(p1.getHealth() - witcher.getDamage());
+            gameMessageArea.append("Player health: " + p1.getHealth() + "\n");
+            witcher.setMonsterHealth(witcher.getMonsterHealth() - p1.getAttack());
+            gameMessageArea.append("Monster health: " + witcher.getMonsterHealth() + "\n");
+            try{TimeUnit.SECONDS.sleep(2);} catch(InterruptedException e){Thread.currentThread().interrupt();}
+
+            if (witcher.getMonsterHealth() <= 0){
+                panelBattleArea.remove(witcherAttackButton);
+                fr.repaint();
+                p1.setExp(110 + rand.nextInt(150));
+                Monster.numberOfMonsters--;
+                gameMessageArea.append("Player lvl is: " + p1.getLvl() + "\n");
+                gameMessageArea.append("Remaining number of monsters is: " + Monster.numberOfMonsters + "\n");
+            }
+
+        }
+    }
+
+    class BasiliskAttackButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent ev){
+            gameMessageArea.append("Attack basilisk!!!" +"\n");
+            basilisk.shout();
+
+            p1.setHealth(p1.getHealth() - basilisk.getDamage());
+            gameMessageArea.append("Player health: " + p1.getHealth() + "\n");
+            basilisk.setMonsterHealth(basilisk.getMonsterHealth() - p1.getAttack());
+            gameMessageArea.append("Monster health: " + basilisk.getMonsterHealth() + "\n");
+            try{TimeUnit.SECONDS.sleep(2);} catch(InterruptedException e){Thread.currentThread().interrupt();}
+
+            if (basilisk.getMonsterHealth() <= 0){
+                panelBattleArea.remove(basiliskAttackButton);
+                fr.repaint();
+                p1.setExp(110 + rand.nextInt(150));
+                Monster.numberOfMonsters--;
+                gameMessageArea.append("Player lvl is: " + p1.getLvl() + "\n");
+                gameMessageArea.append("Remaining number of monsters is: " + Monster.numberOfMonsters + "\n");
+            }
+
+        }
+    }
 
     class ShopSelectionListener implements ListSelectionListener{
         public void valueChanged(ListSelectionEvent ev){
